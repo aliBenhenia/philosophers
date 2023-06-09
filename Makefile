@@ -6,7 +6,7 @@ SRC =  main.c
 OBJ = $(SRC:%.c=%.o)
 all : $(NAME)
 $(NAME) : $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ)  -o $(NAME) -fsanitize=thread
+	$(CC) $(CFLAGS) $(OBJ)  -o $(NAME) #-fsanitize=thread
 %.o : %.c 
 	$(CC) $(CFLAGS)  -c $< -o $@
 clean : 

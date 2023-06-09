@@ -3,7 +3,8 @@
 void	addfront(t_philo **head, t_philo *new)
 {
 	t_philo	*current;
-	if((*head) == NULL)
+
+	if ((*head) == NULL)
 	{
 		*(head) = new;
 		new->next = NULL;
@@ -66,11 +67,11 @@ unsigned long get_time()
 	return(time);
 }
 
-
 unsigned long start_time;
 int state = 1;
 pthread_mutex_t printf_mutex;
 pthread_mutex_t meal_mutex;
+pthread_mutex_t sleep_mutex;
 
 int printf_message(t_philo *ph,char *str)
 {
@@ -82,21 +83,18 @@ int printf_message(t_philo *ph,char *str)
 void custom_sleep(int ms)
 {
 	unsigned long time;
+
 	time = get_time();
 	while (get_time() - time < (unsigned long)ms)
-	{
-		usleep(100);
-	}
+		usleep(200);
 }
 
-void *routine(t_philo *philo)
+void *call_back(t_philo *philo)
 {
+	if (philo->key % 2)
+		usleep(200);
 	while (1)
 	{
-		if (philo->key % 2)
-			usleep(100);
-		if(philo->num_of_philo == 1)
-			break;
 		pthread_mutex_lock(&philo->fork);
 		printf_message(philo,"has taken a fork");
 		pthread_mutex_lock(&philo->next->fork);
@@ -105,12 +103,15 @@ void *routine(t_philo *philo)
 		pthread_mutex_lock(&philo->lock_death);
 		philo->last_time_eat = get_time();
 		pthread_mutex_unlock(&philo->lock_death);
+		pthread_mutex_lock(&philo->lock_meal);
 		philo->nbr_meal++;
+		pthread_mutex_unlock(&philo->lock_meal);
+		// philo->nbr_meal++;
 		custom_sleep(philo->time_eat);
 		pthread_mutex_unlock(&philo->fork);
 		pthread_mutex_unlock(&philo->next->fork);
 		printf_message(philo,"is sleeping");
-		custom_sleep(philo->time_sleep); // time to sleep
+		custom_sleep(philo->time_sleep); 
 		printf_message(philo,"is thinking");
 	}
 	return (NULL);
@@ -143,19 +144,23 @@ int	meals_checker(t_philo *philo)
 	i = 0;
 	while (i++ < philo->num_of_philo)
 	{
-		// pthread_mutex_lock(&philo->my_lock);
-		if (philo->nbr_meal != philo->num_of_time_to_eat)
+		pthread_mutex_lock(&philo->lock_meal);
+		if (philo->nbr_meal < philo->num_of_time_to_eat)
+		{
+			pthread_mutex_unlock(&philo->lock_meal);
 			return (0);
-		// pthread_mutex_unlock(&philo->my_lock);
+		}
+		pthread_mutex_unlock(&philo->lock_meal);
 		philo = philo->next;
 	}
 	return (1);
 }
 
-void	ft_create_threads(t_philo **ph)
+void	threads_creater(t_philo	**ph)
 {
-	int	i;
+	int		i;
 	t_philo *philo;
+
 	philo = *ph;
 	i = 0;
 	while (i < philo->num_of_philo)
@@ -167,17 +172,10 @@ void	ft_create_threads(t_philo **ph)
 	i = 0;
 	while (i < philo->num_of_philo)
 	{
-		pthread_create(&philo->thread,NULL,(void *)routine,philo);
+		pthread_create(&philo->thread,NULL,(void *)call_back,philo);
 		i++;
 		pthread_detach(philo->thread);
 		philo = philo->next;
-	}
-	while (state)
-	{	
-
-		if (death_checker(philo) || meals_checker(philo))
-			break;
-		usleep(100);
 	}
 }
 
@@ -195,18 +193,28 @@ int	check_args(int ac, char *av[])
 	return 1;
 }
 
+void	state_controller(t_philo *philo)
+{
+	while (1)
+	{
+		if (death_checker(philo) || meals_checker(philo))
+			break;
+		usleep(200);
+	}
+}
+
 int main(int ac, char *av[])
 { 
    t_philo	*philo;
    philo = NULL;
+
    if(check_args(ac,av) == 0)
 		return (1);
-   parsing_args(&philo,av);
+   	parsing_args(&philo,av);
 	start_time = get_time();
 	pthread_mutex_init(&printf_mutex,NULL);
-	pthread_mutex_init(&meal_mutex,NULL);
-   ft_create_threads(&philo);
-
-    // display(philo);
+	pthread_mutex_init(&sleep_mutex,NULL);
+  	threads_creater(&philo);
+	state_controller(philo);
    return 0;
 }
