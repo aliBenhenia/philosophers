@@ -75,9 +75,11 @@ pthread_mutex_t sleep_mutex;
 
 int printf_message(t_philo *ph,char *str)
 {
-	pthread_mutex_lock(&printf_mutex);
+	pthread_mutex_t printf_mutex1;
+	pthread_mutex_init(&printf_mutex1,NULL);
+	pthread_mutex_lock(&printf_mutex1);
 	printf("%ld %d %s\n",get_time() - start_time,ph->key,str);
-	pthread_mutex_unlock(&printf_mutex);
+	pthread_mutex_unlock(&printf_mutex1);
 	return 1;
 }
 void custom_sleep(int ms)
@@ -91,11 +93,23 @@ void custom_sleep(int ms)
 
 void *call_back(t_philo *philo)
 {
-	if (philo->key % 2)
+	if (philo->key % 2 == 0)
 		usleep(200);
 	while (1)
 	{
 		pthread_mutex_lock(&philo->fork);
+		if (philo->nbr_meal == philo->num_of_time_to_eat && philo->key == 2)
+		{
+			pthread_mutex_unlock(&philo->fork);
+			pthread_mutex_unlock(&philo->next->fork);
+			break;
+		}
+		if (philo->nbr_meal == philo->num_of_time_to_eat)
+		{
+			pthread_mutex_unlock(&philo->fork);
+			pthread_mutex_unlock(&philo->next->fork);
+			break;
+		}
 		printf_message(philo,"has taken a fork");
 		pthread_mutex_lock(&philo->next->fork);
 		printf_message(philo,"has taken a fork");
@@ -106,7 +120,6 @@ void *call_back(t_philo *philo)
 		pthread_mutex_lock(&philo->lock_meal);
 		philo->nbr_meal++;
 		pthread_mutex_unlock(&philo->lock_meal);
-		// philo->nbr_meal++;
 		custom_sleep(philo->time_eat);
 		pthread_mutex_unlock(&philo->fork);
 		pthread_mutex_unlock(&philo->next->fork);
@@ -122,6 +135,7 @@ int	death_checker(t_philo *philo)
 	int	i;
 
 	i = 0;
+	usleep(2000);
 	while (i++ < philo->num_of_philo)
 	{
 		pthread_mutex_lock(&philo->lock_death);
@@ -147,6 +161,11 @@ int	meals_checker(t_philo *philo)
 		pthread_mutex_lock(&philo->lock_meal);
 		if (philo->nbr_meal < philo->num_of_time_to_eat)
 		{
+			if (philo->key != 1)
+			{
+				pthread_mutex_unlock(&philo->fork);
+				pthread_mutex_unlock(&philo->next->fork);
+			}
 			pthread_mutex_unlock(&philo->lock_meal);
 			return (0);
 		}
@@ -197,9 +216,9 @@ void	state_controller(t_philo *philo)
 {
 	while (1)
 	{
+		usleep(200);
 		if (death_checker(philo) || meals_checker(philo))
 			break;
-		usleep(200);
 	}
 }
 
