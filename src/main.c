@@ -1,69 +1,12 @@
-#include "philo.h"
+#include "../includes/philo.h"
 
-void	addfront(t_philo **head, t_philo *new)
-{
-	t_philo	*current;
-
-	if ((*head) == NULL)
-	{
-		*(head) = new;
-		new->next = NULL;
-		return ;
-	}
-	current = *(head);
-	while (current->next != NULL)
-		current = current->next;
-	current->next = new;
-}
-
-t_philo	*addnew(char *av[],int i)
-{
-	t_philo	*new;
-
-	new = malloc(sizeof(t_philo));
-	if (!new)
-		return (NULL);
-	new->key = i + 1;
-	new->num_of_philo = atoi(av[1]);
-	new->time_eat = atoi(av[3]);
-	new->time_sleep = atoi(av[4]);
-	new->time_die = atoi(av[2]);
-	new->nbr_meal = -1290;
-	if(av[5])
-	{
-		new->nbr_meal = 0;
-		new->num_of_time_to_eat = atoi(av[5]);
-	}
-	pthread_mutex_init(&new->fork,NULL);
-	pthread_mutex_init(&new->lock_death,NULL);
-	pthread_mutex_init(&new->lock_meal,NULL);
-	new->next = NULL;
-	return (new);
-}
-
-void	parsing_args(t_philo **philo,char *av[])
-{
-	int	i;
-	int	num_of;
-	t_philo	*new_philo;
-
-	i = 0;
-	num_of = atoi(av[1]);
-	while (i < num_of)
-	{
-		new_philo = addnew(av,i);
-		i++;
-		addfront(philo, new_philo);
-	}
-	new_philo->next = *philo;
-}
 
 unsigned long get_time()
 {
 	struct timeval tv;
 	unsigned long time;
 	gettimeofday(&tv,NULL);
-	time = tv.tv_usec /1000 + (tv.tv_sec * 1000);
+	time = tv.tv_usec / 1000 + (tv.tv_sec * 1000);
 	return(time);
 }
 
@@ -75,13 +18,12 @@ pthread_mutex_t sleep_mutex;
 
 int printf_message(t_philo *ph,char *str)
 {
-	pthread_mutex_t printf_mutex1;
-	pthread_mutex_init(&printf_mutex1,NULL);
-	pthread_mutex_lock(&printf_mutex1);
+	pthread_mutex_lock(&printf_mutex);
 	printf("%ld %d %s\n",get_time() - start_time,ph->key,str);
-	pthread_mutex_unlock(&printf_mutex1);
+	pthread_mutex_unlock(&printf_mutex);
 	return 1;
 }
+
 void custom_sleep(int ms)
 {
 	unsigned long time;
@@ -101,13 +43,13 @@ void *call_back(t_philo *philo)
 		if (philo->nbr_meal == philo->num_of_time_to_eat && philo->key == 2)
 		{
 			pthread_mutex_unlock(&philo->fork);
-			pthread_mutex_unlock(&philo->next->fork);
+			// pthread_mutex_unlock(&philo->next->fork);
 			break;
 		}
 		if (philo->nbr_meal == philo->num_of_time_to_eat)
 		{
 			pthread_mutex_unlock(&philo->fork);
-			pthread_mutex_unlock(&philo->next->fork);
+			// pthread_mutex_unlock(&philo->next->fork);
 			break;
 		}
 		printf_message(philo,"has taken a fork");
@@ -118,7 +60,8 @@ void *call_back(t_philo *philo)
 		philo->last_time_eat = get_time();
 		pthread_mutex_unlock(&philo->lock_death);
 		pthread_mutex_lock(&philo->lock_meal);
-		philo->nbr_meal++;
+		if (philo->num_of_time_to_eat != -77)
+			philo->nbr_meal++;
 		pthread_mutex_unlock(&philo->lock_meal);
 		custom_sleep(philo->time_eat);
 		pthread_mutex_unlock(&philo->fork);
@@ -135,7 +78,7 @@ int	death_checker(t_philo *philo)
 	int	i;
 
 	i = 0;
-	usleep(2000);
+	usleep(1000);
 	while (i++ < philo->num_of_philo)
 	{
 		pthread_mutex_lock(&philo->lock_death);
@@ -198,15 +141,18 @@ void	threads_creater(t_philo	**ph)
 	}
 }
 
+
 int	check_args(int ac, char *av[])
 {
+	if (ac == 2)
+		return (1);
 	if(ac > 6 || ac < 5)
 		return 0;
-	if(atoi(av[1]) < 0 || atoi(av[2]) < 0 || atoi(av[3]) < 0 || atoi(av[4]) < 0 )
+	if(ft_atoi(av[1]) < 0 || ft_atoi(av[2]) < 0 || ft_atoi(av[3]) < 0 || ft_atoi(av[4]) < 0 )
 		return 0;
 	if(av[5])
 	{
-		if(atoi(av[5]) < 0)
+		if(ft_atoi(av[5]) < 0)
 			return 0;
 	}
 	return 1;
@@ -225,15 +171,15 @@ void	state_controller(t_philo *philo)
 int main(int ac, char *av[])
 { 
    t_philo	*philo;
-   philo = NULL;
+	philo = NULL;
 
-   if(check_args(ac,av) == 0)
+    if(check_args(ac,av) == 0)
 		return (1);
-   	parsing_args(&philo,av);
+   	parsing_args(&philo,av, ac);
 	start_time = get_time();
 	pthread_mutex_init(&printf_mutex,NULL);
 	pthread_mutex_init(&sleep_mutex,NULL);
   	threads_creater(&philo);
 	state_controller(philo);
-   return 0;
+    return 0;
 }

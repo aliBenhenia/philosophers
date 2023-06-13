@@ -34,3 +34,15 @@ typedef struct t_philo
     struct t_philo *next;
 
 }t_philo;
+char	**ft_split(char const *s, char c);
+int	    ft_atoi(const char *s);
+void	addfront(t_philo **head, t_philo *new);
+t_philo	*addnew(char *av[],int i);
+unsigned long get_time();
+void	parsing_args(t_philo **philo,char *av[], int ac);
+void    custom_sleep(int ms);
+void	state_controller(t_philo *philo);
+int	death_checker(t_philo *philo);
+int	meals_checker(t_philo *philo);
+int	check_args(int ac, char *av[]);
+int	meals_checker(t_philo *philo);
