@@ -14,7 +14,7 @@
 //     // pthread_mutex_t   forks;
 //     t_philo *philo;
 // }t_data;
-
+#define NOT_PASSED -77
 typedef struct t_philo
 {
     int key;
@@ -46,3 +46,5 @@ int	death_checker(t_philo *philo);
 int	meals_checker(t_philo *philo);
 int	check_args(int ac, char *av[]);
 int	meals_checker(t_philo *philo);
+int printf_message(t_philo *ph,char *str);
+void	simulator(t_philo *philo);
