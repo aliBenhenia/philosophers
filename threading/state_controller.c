@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   state_controller.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abenheni <abenheni@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/16 19:35:15 by abenheni          #+#    #+#             */
+/*   Updated: 2023/06/16 19:35:16 by abenheni         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/philo.h"
 
 void	state_controller(t_philo *philo)
@@ -6,9 +18,10 @@ void	state_controller(t_philo *philo)
 	{
 		usleep(200);
 		if (death_checker(philo) || meals_checker(philo))
-			break;
+			break ;
 	}
 }
+
 int	meals_checker(t_philo *philo)
 {
 	int	i;
@@ -38,10 +51,12 @@ void	simulator(t_philo *philo)
 	while (1)
 	{
 		pthread_mutex_lock(&philo->fork);
-		printf_message(philo,"has taken a fork");
+		if (philo->nbr_meal == philo->num_of_time_to_eat)
+			break ;
+		printf_message(philo, "has taken a fork");
 		pthread_mutex_lock(&philo->next->fork);
-		printf_message(philo,"has taken a fork");
-		printf_message(philo,"is eating");
+		printf_message(philo, "has taken a fork");
+		printf_message(philo, "is eating");
 		pthread_mutex_lock(&philo->lock_death);
 		philo->last_time_eat = get_time();
 		pthread_mutex_unlock(&philo->lock_death);
@@ -52,8 +67,8 @@ void	simulator(t_philo *philo)
 		custom_sleep(philo->time_eat);
 		pthread_mutex_unlock(&philo->fork);
 		pthread_mutex_unlock(&philo->next->fork);
-		printf_message(philo,"is sleeping");
-		custom_sleep(philo->time_sleep); 
-		printf_message(philo,"is thinking");
+		printf_message(philo, "is sleeping");
+		custom_sleep(philo->time_sleep);
+		printf_message(philo, "is thinking");
 	}
 }
