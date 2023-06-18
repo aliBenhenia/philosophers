@@ -6,7 +6,7 @@
 /*   By: abenheni <abenheni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 19:35:06 by abenheni          #+#    #+#             */
-/*   Updated: 2023/06/16 19:44:34 by abenheni         ###   ########.fr       */
+/*   Updated: 2023/06/18 10:04:05 by abenheni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,5 @@ int				check_args(int ac, char *av[]);
 int				meals_checker(t_philo *philo);
 int				printf_message(t_philo *ph, char *str);
 void			simulator(t_philo *philo);
+void			free_all_recources(t_philo *philo);
 #endif

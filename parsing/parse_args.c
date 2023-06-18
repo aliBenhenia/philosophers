@@ -6,7 +6,7 @@
 /*   By: abenheni <abenheni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 19:35:02 by abenheni          #+#    #+#             */
-/*   Updated: 2023/06/16 19:46:00 by abenheni         ###   ########.fr       */
+/*   Updated: 2023/06/18 16:57:46 by abenheni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ void	parsing_args(t_philo **philo, char *av[])
 
 int	check_args(int ac, char *av[])
 {
-	if (ac == 2)
-		return (1);
 	if (ac > 6 || ac < 5)
 		return (0);
 	if (ft_atoi(av[1]) <= 0 || ft_atoi(av[2]) <= 0
@@ -60,7 +58,7 @@ int	check_args(int ac, char *av[])
 		return (0);
 	if (av[5])
 	{
-		if (ft_atoi(av[5]) < 0)
+		if (ft_atoi(av[5]) <= 0)
 			return (0);
 	}
 	return (1);

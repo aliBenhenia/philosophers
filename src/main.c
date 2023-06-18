@@ -6,7 +6,7 @@
 /*   By: abenheni <abenheni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 19:34:53 by abenheni          #+#    #+#             */
-/*   Updated: 2023/06/16 19:40:50 by abenheni         ###   ########.fr       */
+/*   Updated: 2023/06/18 16:58:28 by abenheni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@ int	printf_message(t_philo *ph, char *str)
 	return (1);
 }
 
-void	*call_back(t_philo *philo)
+void	*call_back(void *arg)
 {
 	int	i;
+	t_philo	*philo;
 
 	i = 0;
+	philo = (t_philo *)arg;
 	if (philo->key % 2 == 0)
 	{
 		while (i++ <= 500)
@@ -65,20 +67,25 @@ void	threads_creater(t_philo	**ph)
 	i = 0;
 	while (i++ < philo->num_of_philo)
 	{
-		philo->last_time_eat = get_time();
+		philo->last_time_eat = philo->data->start_time;
 		philo = philo->next;
 	}
 	i = 0;
 	while (i++ < philo->num_of_philo)
 	{
-		pthread_create(&philo->thread, NULL, (void *)call_back, philo);
+		pthread_create(&philo->thread, NULL, call_back, philo);
 		pthread_detach(philo->thread);
 		philo = philo->next;
 	}
 }
 
+void dd()
+{
+	system("leaks philo");
+}
 int	main(int ac, char *av[])
 {
+	atexit(dd);
 	t_philo	*philo;
 
 	philo = NULL;
