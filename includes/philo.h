@@ -6,7 +6,7 @@
 /*   By: abenheni <abenheni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 19:35:06 by abenheni          #+#    #+#             */
-/*   Updated: 2023/06/18 10:04:05 by abenheni         ###   ########.fr       */
+/*   Updated: 2023/06/18 19:06:03 by abenheni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int				ft_atoi(const char *s);
 void			addfront(t_philo **head, t_philo *new);
 t_philo			*addnew(char *av[], int i);
 unsigned long	get_time(void);
-void			parsing_args(t_philo **philo, char *av[]);
+int				parsing_args(t_philo **philo, char *av[]);
 void			custom_sleep(int ms);
 void			state_controller(t_philo *philo);
 int				death_checker(t_philo *philo);

@@ -6,7 +6,7 @@
 /*   By: abenheni <abenheni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 19:34:53 by abenheni          #+#    #+#             */
-/*   Updated: 2023/06/18 16:58:28 by abenheni         ###   ########.fr       */
+/*   Updated: 2023/06/18 19:05:37 by abenheni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	printf_message(t_philo *ph, char *str)
 
 void	*call_back(void *arg)
 {
-	int	i;
+	int		i;
 	t_philo	*philo;
 
 	i = 0;
@@ -58,7 +58,7 @@ int	death_checker(t_philo *philo)
 	return (0);
 }
 
-void	threads_creater(t_philo	**ph)
+int	threads_creater(t_philo	**ph)
 {
 	int			i;
 	t_philo		*philo;
@@ -73,26 +73,35 @@ void	threads_creater(t_philo	**ph)
 	i = 0;
 	while (i++ < philo->num_of_philo)
 	{
-		pthread_create(&philo->thread, NULL, call_back, philo);
+		if (pthread_create(&philo->thread, NULL, call_back, philo) == -1)
+		{
+			write(2, "error\n", 7);
+			return (-1);
+		}
 		pthread_detach(philo->thread);
 		philo = philo->next;
 	}
+	return (0);
 }
 
-void dd()
+void	dd(void)
 {
 	system("leaks philo");
 }
+
 int	main(int ac, char *av[])
 {
-	atexit(dd);
 	t_philo	*philo;
 
 	philo = NULL;
 	if (check_args(ac, av) == 0)
-		return (1);
-	parsing_args(&philo, av);
-	threads_creater(&philo);
+	{
+		return (0);
+	}
+	if (parsing_args(&philo, av) == -1)
+		return (0);
+	if (threads_creater(&philo) == -1)
+		return (0);
 	state_controller(philo);
 	return (0);
 }
