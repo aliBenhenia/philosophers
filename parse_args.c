@@ -6,11 +6,11 @@
 /*   By: abenheni <abenheni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 19:35:02 by abenheni          #+#    #+#             */
-/*   Updated: 2023/06/18 21:36:03 by abenheni         ###   ########.fr       */
+/*   Updated: 2023/06/21 22:40:40 by abenheni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
+#include "philo.h"
 
 int	parse_global_data(t_philo **philo)
 {

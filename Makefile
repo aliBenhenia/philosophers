@@ -1,9 +1,9 @@
 NAME = philo
 CC = cc
 RM = rm -f
-HEADER = ./includes/philo.h
+HEADER = philo.h
 CFLAGS = -Wall -Werror -Wextra #-fsanitize=thread
-SRC =   ./utils/ft_atoi.c ./utils/addfront.c  ./utils/addnew.c ./threading/state_controller.c ./utils/get_time.c  ./parsing/parse_args.c ./src/main.c
+SRC =   ft_atoi.c addfront.c  addnew.c state_controller.c get_time.c  parse_args.c main.c
 OBJ = $(SRC:%.c=%.o)
 all : $(NAME)
 $(NAME) : $(OBJ)

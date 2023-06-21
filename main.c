@@ -6,11 +6,11 @@
 /*   By: abenheni <abenheni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 19:34:53 by abenheni          #+#    #+#             */
-/*   Updated: 2023/06/20 22:30:13 by abenheni         ###   ########.fr       */
+/*   Updated: 2023/06/21 22:48:23 by abenheni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
+#include "philo.h"
 
 void	printf_message(t_philo *ph, char *str)
 {
@@ -89,11 +89,20 @@ int	main(int ac, char *av[])
 
 	philo = NULL;
 	if (check_args(ac, av) == 0)
+	{
+		write(2, "invalid argument\n", 18);
 		return (0);
+	}
 	if (parsing_args(&philo, av) == -1)
+	{
+		write(2, "error\n", 6);
 		return (0);
+	}
 	if (threads_creater(&philo) == -1)
+	{
+		write(2, "error\n", 6);
 		return (0);
+	}
 	state_controller(philo);
 	return (0);
 }

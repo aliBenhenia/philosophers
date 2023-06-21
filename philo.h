@@ -6,7 +6,7 @@
 /*   By: abenheni <abenheni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 19:35:06 by abenheni          #+#    #+#             */
-/*   Updated: 2023/06/21 13:29:14 by abenheni         ###   ########.fr       */
+/*   Updated: 2023/06/21 23:00:04 by abenheni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include<stdlib.h>
 # include<pthread.h>
 # include<time.h>
+# include<limits.h>
 # include <sys/time.h>
 
 typedef struct t_data

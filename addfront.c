@@ -1,32 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_time.c                                         :+:      :+:    :+:   */
+/*   addfront.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abenheni <abenheni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/16 19:35:28 by abenheni          #+#    #+#             */
-/*   Updated: 2023/06/20 19:35:18 by abenheni         ###   ########.fr       */
+/*   Created: 2023/06/16 19:35:19 by abenheni          #+#    #+#             */
+/*   Updated: 2023/06/21 22:40:11 by abenheni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
+#include "philo.h"
 
-unsigned long	get_time(void)
+void	addfront(t_philo **head, t_philo *new)
 {
-	struct timeval	tv;
-	unsigned long	time;
+	t_philo	*current;
 
-	gettimeofday(&tv, NULL);
-	time = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
-	return (time);
-}
-
-void	custom_sleep(int ms)
-{
-	unsigned long	start_time;
-
-	start_time = get_time();
-	while (get_time() - start_time < (unsigned long)ms)
-		usleep(100);
+	if (new == NULL)
+		return ;
+	if ((*head) == NULL)
+	{
+		*(head) = new;
+		new->next = NULL;
+		return ;
+	}
+	current = *(head);
+	while (current->next != NULL)
+		current = current->next;
+	current->next = new;
 }

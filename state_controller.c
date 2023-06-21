@@ -6,11 +6,11 @@
 /*   By: abenheni <abenheni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 19:35:15 by abenheni          #+#    #+#             */
-/*   Updated: 2023/06/20 18:27:21 by abenheni         ###   ########.fr       */
+/*   Updated: 2023/06/21 22:40:47 by abenheni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
+#include "philo.h"
 
 void	state_controller(t_philo *philo)
 {

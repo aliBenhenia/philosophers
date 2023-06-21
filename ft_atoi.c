@@ -6,17 +6,11 @@
 /*   By: abenheni <abenheni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 19:35:25 by abenheni          #+#    #+#             */
-/*   Updated: 2023/06/18 18:51:46 by abenheni         ###   ########.fr       */
+/*   Updated: 2023/06/21 23:02:27 by abenheni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
-
-int	print_error(void)
-{
-	write(2, "invalid argument\n", 18);
-	return (-1);
-}
+#include "philo.h"
 
 int	ft_atoi(const char *s)
 {
@@ -41,6 +35,8 @@ int	ft_atoi(const char *s)
 	while (*s == 32 || (*s >= 9 && *s <= 13))
 		s++;
 	if (*s != '\0')
-		return (print_error());
+		return (-1);
+	if (r > INT_MAX)
+		return (-1);
 	return ((int)r * sign);
 }
