@@ -6,7 +6,7 @@
 /*   By: abenheni <abenheni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 19:35:02 by abenheni          #+#    #+#             */
-/*   Updated: 2023/06/18 19:10:24 by abenheni         ###   ########.fr       */
+/*   Updated: 2023/06/18 21:36:03 by abenheni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	parse_global_data(t_philo **philo)
 
 	i = 0;
 	(*philo)->data = malloc(sizeof(t_data));
-	if ((*philo)->data != NULL)
+	if ((*philo)->data == NULL)
 		return (-1);
 	(*philo)->data->start_time = get_time();
 	pthread_mutex_init(&(*philo)->data->printf_mutex, NULL);

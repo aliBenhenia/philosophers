@@ -6,7 +6,7 @@
 /*   By: abenheni <abenheni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 19:35:15 by abenheni          #+#    #+#             */
-/*   Updated: 2023/06/17 20:01:37 by abenheni         ###   ########.fr       */
+/*   Updated: 2023/06/20 18:27:21 by abenheni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,6 @@ int	meals_checker(t_philo *philo)
 		pthread_mutex_lock(&philo->lock_meal);
 		if (philo->nbr_meal < philo->num_of_time_to_eat)
 		{
-			if (philo->key != 1)
-			{
-				pthread_mutex_unlock(&philo->fork);
-				pthread_mutex_unlock(&philo->next->fork);
-			}
 			pthread_mutex_unlock(&philo->lock_meal);
 			return (0);
 		}
@@ -51,8 +46,6 @@ void	simulator(t_philo *philo)
 	while (1)
 	{
 		pthread_mutex_lock(&philo->fork);
-		if (philo->nbr_meal == philo->num_of_time_to_eat)
-			break ;
 		printf_message(philo, "has taken a fork");
 		pthread_mutex_lock(&philo->next->fork);
 		printf_message(philo, "has taken a fork");

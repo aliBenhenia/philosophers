@@ -6,18 +6,17 @@
 /*   By: abenheni <abenheni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 19:34:53 by abenheni          #+#    #+#             */
-/*   Updated: 2023/06/18 19:05:37 by abenheni         ###   ########.fr       */
+/*   Updated: 2023/06/20 22:30:13 by abenheni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int	printf_message(t_philo *ph, char *str)
+void	printf_message(t_philo *ph, char *str)
 {
 	pthread_mutex_lock(&ph->data->printf_mutex);
 	printf("%ld %d %s\n", get_time() - ph->data->start_time, ph->key, str);
 	pthread_mutex_unlock(&ph->data->printf_mutex);
-	return (1);
 }
 
 void	*call_back(void *arg)
@@ -41,7 +40,6 @@ int	death_checker(t_philo *philo)
 	int	i;
 
 	i = 0;
-	usleep(200);
 	while (i++ < philo->num_of_philo)
 	{
 		pthread_mutex_lock(&philo->lock_death);
@@ -78,15 +76,11 @@ int	threads_creater(t_philo	**ph)
 			write(2, "error\n", 7);
 			return (-1);
 		}
-		pthread_detach(philo->thread);
+		if (pthread_detach(philo->thread) == -1)
+			return (-1);
 		philo = philo->next;
 	}
 	return (0);
-}
-
-void	dd(void)
-{
-	system("leaks philo");
 }
 
 int	main(int ac, char *av[])
@@ -95,9 +89,7 @@ int	main(int ac, char *av[])
 
 	philo = NULL;
 	if (check_args(ac, av) == 0)
-	{
 		return (0);
-	}
 	if (parsing_args(&philo, av) == -1)
 		return (0);
 	if (threads_creater(&philo) == -1)

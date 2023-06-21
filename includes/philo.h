@@ -6,7 +6,7 @@
 /*   By: abenheni <abenheni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 19:35:06 by abenheni          #+#    #+#             */
-/*   Updated: 2023/06/18 19:06:03 by abenheni         ###   ########.fr       */
+/*   Updated: 2023/06/21 13:29:14 by abenheni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ typedef struct t_data
 {
 	pthread_mutex_t	printf_mutex;
 	unsigned long	start_time;
-}t_data;
+}	t_data;
 
 # define NOT_PASSED -77
 
@@ -57,7 +57,6 @@ int				death_checker(t_philo *philo);
 int				meals_checker(t_philo *philo);
 int				check_args(int ac, char *av[]);
 int				meals_checker(t_philo *philo);
-int				printf_message(t_philo *ph, char *str);
+void			printf_message(t_philo *ph, char *str);
 void			simulator(t_philo *philo);
-void			free_all_recources(t_philo *philo);
 #endif

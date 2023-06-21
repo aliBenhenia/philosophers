@@ -7,9 +7,9 @@ SRC =   ./utils/ft_atoi.c ./utils/addfront.c  ./utils/addnew.c ./threading/state
 OBJ = $(SRC:%.c=%.o)
 all : $(NAME)
 $(NAME) : $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ)  -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 %.o : %.c $(HEADER)
-	$(CC) $(CFLAGS)  -c $< -o $@ 
+	$(CC) $(CFLAGS)  -c $< -o $@
 clean :
 	$(RM) $(OBJ)
 fclean : clean
